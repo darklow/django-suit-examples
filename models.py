@@ -1,4 +1,6 @@
 from django.db import models
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 
 class Continent(models.Model):
@@ -84,3 +86,32 @@ class KitchenSink(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+##################################
+#
+# Integrations examples
+#
+##################################
+
+#
+# Django-mptt
+# https://github.com/django-mptt/django-mptt/
+#
+class Category(MPTTModel):
+    name = models.CharField(max_length=64)
+    slug = models.CharField(max_length=64)
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children')
+    is_active = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = "Categories (django-mptt)"
+        # Be careful changing app_label, change it after all your modifications
+        # on model class are done
+        app_label = 'integrations'
+        db_table = 'examples_category'

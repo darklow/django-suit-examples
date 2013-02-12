@@ -2,19 +2,9 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin, SimpleListFilter
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms import TextInput, ModelForm, Textarea, Select
-from .models import Country, Continent, KitchenSink
+from .models import Country, Continent, KitchenSink, Category
+from mptt.admin import MPTTModelAdmin
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget
-from django.utils.translation import ugettext_lazy as _
-
-
-class CountryForm(ModelForm):
-    class Meta:
-        SmallInput = TextInput(attrs={'class': 'input-mini'})
-        CompactTextarea = Textarea(attrs={'rows': '2'})
-        widgets = {
-            'code': SmallInput,
-            'independence_day': SuitDateWidget,
-        }
 
 
 class ContinentAdmin(ModelAdmin):
@@ -28,6 +18,14 @@ class ContinentAdmin(ModelAdmin):
 
 
 admin.site.register(Continent, ContinentAdmin)
+
+
+class CountryForm(ModelForm):
+    class Meta:
+        widgets = {
+            'code': TextInput(attrs={'class': 'input-mini'}),
+            'independence_day': SuitDateWidget,
+        }
 
 
 class CountryAdmin(ModelAdmin):
@@ -75,6 +73,29 @@ class KitchenSinkForm(ModelForm):
             'linked_foreign_key': Select(attrs={'class': 'linked-select'}),
         }
 
+#
+# class FridgeInlineForm(ModelForm):
+#     class Meta:
+#         model = Fridge
+#         CompactTextArea = Textarea(
+#             attrs={'class': 'input-large', 'rows': 2, 'style': 'width:95%'})
+#         widgets = {
+#             'description': CompactTextArea,
+#             'type': Select(attrs={'class': 'input-medium'}),
+#             }
+#
+#
+# class FridgeInline(admin.TabularInline):
+#     model = Fridge
+#     form = FridgeInlineForm
+#     extra = 1
+#     verbose_name_plural = 'Fridges (Tabular inline)'
+#
+# class CountryInline(admin.StackedInline):
+#     model = Microwave
+#     extra = 1
+#     verbose_name_plural = 'Microwaves (Stacked inline)'
+
 
 class KitchenSinkAdmin(admin.ModelAdmin):
     raw_id_fields = ()
@@ -117,3 +138,22 @@ class KitchenSinkAdmin(admin.ModelAdmin):
 
 
 admin.site.register(KitchenSink, KitchenSinkAdmin)
+
+##################################
+#
+# Integrations examples
+#
+##################################
+
+#
+# Django-mptt
+# https://github.com/django-mptt/django-mptt/
+#
+class CategoryAdmin(MPTTModelAdmin):
+    mptt_level_indent = 20
+    search_fields = ('name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+    list_display = ('name', 'slug', 'is_active')
+
+
+admin.site.register(Category, CategoryAdmin)
