@@ -104,6 +104,7 @@ class Category(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children')
     is_active = models.BooleanField()
+    order = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -115,3 +116,14 @@ class Category(MPTTModel):
         # on model class are done
         app_label = 'integrations'
         db_table = 'examples_category'
+        # Category.objects.rebuild()
+
+    class MPTTMeta:
+        order_insertion_by = ['order']
+
+    def save(self, *args, **kwargs):
+        super(Category, self).save(*args, **kwargs)
+        Category.objects.rebuild()
+
+
+

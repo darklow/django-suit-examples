@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django.forms import TextInput, ModelForm, Textarea, Select
 from .models import Country, Continent, KitchenSink, Category
 from mptt.admin import MPTTModelAdmin
-from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget
+from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
 
 
 class ContinentAdmin(ModelAdmin):
@@ -149,11 +149,25 @@ admin.site.register(KitchenSink, KitchenSinkAdmin)
 # Django-mptt
 # https://github.com/django-mptt/django-mptt/
 #
+class CategoryListForm(ModelForm):
+    class Meta:
+        SmallTextInput = NumberInput(attrs={'class': 'input-mini'})
+        widgets = {
+            'order': SmallTextInput,
+        }
+
+
 class CategoryAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
     search_fields = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
-    list_display = ('name', 'slug', 'is_active')
+    list_display = ('name', 'slug', 'is_active', 'order')
+    list_editable = ('is_active', 'order',)
+
+    def get_changelist_form(self, request, **kwargs):
+        kwargs.setdefault('form', CategoryListForm)
+        return super(CategoryAdmin, self).get_changelist_form(request,
+                                                              **kwargs)
 
 
 admin.site.register(Category, CategoryAdmin)
