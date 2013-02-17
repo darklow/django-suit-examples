@@ -1,6 +1,9 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import ModelAdmin, SimpleListFilter
 from django.contrib.admin.widgets import AdminDateWidget
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
 from .models import Country, Continent, KitchenSink, Category
 from mptt.admin import MPTTModelAdmin
@@ -138,6 +141,36 @@ class KitchenSinkAdmin(admin.ModelAdmin):
 
 
 admin.site.register(KitchenSink, KitchenSinkAdmin)
+
+#
+# Extend original user admin class
+# Limit user change list queryset
+# Add suit date widgets and special warning for user save
+#
+class SuitUserChangeForm(UserChangeForm):
+    class Meta:
+        widgets = {
+            'last_login': SuitSplitDateTimeWidget,
+            'date_joined': SuitSplitDateTimeWidget,
+        }
+
+
+class SuitAdminUser(UserAdmin):
+    form = SuitUserChangeForm
+
+    def queryset(self, request):
+        qs = super(SuitAdminUser, self).queryset(request)
+        return qs.filter(id=6)
+
+    def response_change(self, request, obj):
+        messages.warning(request, 'User data change is prevented in demo mode')
+        return super(SuitAdminUser, self).response_change(request, obj)
+
+
+admin.site.unregister(User)
+admin.site.register(User, SuitAdminUser)
+
+
 
 ##################################
 #
