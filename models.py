@@ -113,10 +113,9 @@ class Category(MPTTModel):
         ordering = ['name']
         verbose_name_plural = "Categories (django-mptt)"
         # Be careful changing app_label, change it after all your modifications
-        # on model class are done
+        # on model class are done. South also doesn't support custom app_label
         app_label = 'integrations'
-        db_table = 'examples_category'
-        # Category.objects.rebuild()
+        # db_table = 'examples_category'
 
     class MPTTMeta:
         order_insertion_by = ['order']
@@ -125,5 +124,25 @@ class Category(MPTTModel):
         super(Category, self).save(*args, **kwargs)
         Category.objects.rebuild()
 
+
+#
+# Django-select2
+# https://github.com/applegrew/django-select2
+#
+class City(models.Model):
+    name = models.CharField(max_length=64)
+    country = models.ForeignKey(Country)
+    capital = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Cities (django-select2)"
+        unique_together = ('name', 'country')
+        # Be careful changing app_label, change it after all your modifications
+        # on model class are done. South also doesn't support custom app_label
+        app_label = 'integrations'
+        db_table = 'examples_city'
 
 

@@ -5,9 +5,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
-from .models import Country, Continent, KitchenSink, Category
-from mptt.admin import MPTTModelAdmin
+from .models import Country, Continent, KitchenSink, Category, City
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
+from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
+from mptt.admin import MPTTModelAdmin
 
 
 class ContinentAdmin(ModelAdmin):
@@ -149,6 +150,7 @@ admin.site.register(KitchenSink, KitchenSinkAdmin)
 #
 class SuitUserChangeForm(UserChangeForm):
     class Meta:
+        model = User
         widgets = {
             'last_login': SuitSplitDateTimeWidget,
             'date_joined': SuitSplitDateTimeWidget,
@@ -204,3 +206,38 @@ class CategoryAdmin(MPTTModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+
+
+#
+# Django-select2
+# https://github.com/applegrew/django-select2
+#
+class CountryChoices(AutoModelSelect2Field):
+    queryset = Country.objects
+    search_fields = ['name__icontains', ]
+
+
+class CityForm(ModelForm):
+    country_verbose_name = Country._meta.verbose_name
+    country = CountryChoices(
+        label=country_verbose_name.capitalize(),
+        widget=AutoHeavySelect2Widget(
+            select2_options={
+                'width': '220px',
+                'placeholder': 'Lookup %s ...' % country_verbose_name
+            }
+        )
+    )
+
+
+class CityAdmin(ModelAdmin):
+    form = CityForm
+    search_fields = ('name', 'country__name')
+    list_display = ('name', 'country', 'capital', 'continent')
+    list_filter = (CountryFilter, 'capital')
+
+    def continent(self, obj):
+        return obj.country.continent
+
+
+admin.site.register(City, CityAdmin)
