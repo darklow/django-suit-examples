@@ -5,7 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
-from .models import Country, Continent, KitchenSink, Category, City
+from .models import Country, Continent, KitchenSink, Category, City, \
+    Microwave, Fridge
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
@@ -77,34 +78,36 @@ class KitchenSinkForm(ModelForm):
             'linked_foreign_key': Select(attrs={'class': 'linked-select'}),
         }
 
-#
-# class FridgeInlineForm(ModelForm):
-#     class Meta:
-#         model = Fridge
-#         CompactTextArea = Textarea(
-#             attrs={'class': 'input-large', 'rows': 2, 'style': 'width:95%'})
-#         widgets = {
-#             'description': CompactTextArea,
-#             'type': Select(attrs={'class': 'input-medium'}),
-#             }
-#
-#
-# class FridgeInline(admin.TabularInline):
-#     model = Fridge
-#     form = FridgeInlineForm
-#     extra = 1
-#     verbose_name_plural = 'Fridges (Tabular inline)'
-#
-# class CountryInline(admin.StackedInline):
-#     model = Microwave
-#     extra = 1
-#     verbose_name_plural = 'Microwaves (Stacked inline)'
+
+# Inlines for KitchenSink
+class FridgeInlineForm(ModelForm):
+    class Meta:
+        model = Fridge
+        CompactTextArea = Textarea(
+            attrs={'class': 'input-large', 'rows': 2, 'style': 'width:95%'})
+        widgets = {
+            'description': CompactTextArea,
+            'type': Select(attrs={'class': 'input-medium'}),
+        }
 
 
+class FridgeInline(admin.TabularInline):
+    model = Fridge
+    form = FridgeInlineForm
+    extra = 1
+    verbose_name_plural = 'Fridges (Tabular inline)'
+
+
+class MicrowaveInline(admin.StackedInline):
+    model = Microwave
+    extra = 1
+    verbose_name_plural = 'Microwaves (Stacked inline)'
+
+# Kitchen sink model admin
 class KitchenSinkAdmin(admin.ModelAdmin):
     raw_id_fields = ()
     form = KitchenSinkForm
-    # inlines = (FridgeInline, MicrowaveInline)
+    inlines = (FridgeInline, MicrowaveInline)
     search_fields = ['name']
     radio_fields = {"horizontal_choices": admin.HORIZONTAL,
                     'vertical_choices': admin.VERTICAL}
@@ -140,6 +143,15 @@ class KitchenSinkAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'help_text', 'choices', 'horizontal_choices', 'boolean')
 
+    def get_formsets(self, request, obj=None):
+        """
+        Set extra=0 for inlines if object already exists
+        """
+        for inline in self.get_inline_instances(request):
+            formset = inline.get_formset(request, obj)
+            if obj:
+                formset.extra = 0
+            yield formset
 
 admin.site.register(KitchenSink, KitchenSinkAdmin)
 

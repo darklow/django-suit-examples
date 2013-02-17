@@ -87,6 +87,29 @@ class KitchenSink(models.Model):
     def __unicode__(self):
         return self.name
 
+# Inline model for KitchenSink
+class Fridge(models.Model):
+    kitchensink = models.ForeignKey(KitchenSink)
+    name = models.CharField(max_length=64)
+    type = models.SmallIntegerField(choices=TYPE_CHOICES3)
+    description = models.TextField(blank=True)
+    is_quiet = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
+
+# Inline model for KitchenSink
+class Microwave(models.Model):
+    kitchensink = models.ForeignKey(KitchenSink)
+    name = models.CharField(max_length=64)
+    type = models.SmallIntegerField(choices=TYPE_CHOICES3, default=2,
+                                    help_text='Choose wisely')
+    is_compact = models.BooleanField()
+
+    def __unicode__(self):
+        return self.name
+
 
 ##################################
 #
