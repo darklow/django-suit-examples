@@ -1,0 +1,11 @@
+{# Extended just to add disclaimer #}
+
+{% extends "admin/change_list.html" %}
+{% load admin_list %}
+
+{% block search %}
+  {{ block.super }}
+  <div class="disclaimer breadcrumb">
+    This is an example of <a href="https://github.com/applegrew/django-select2" target="_blank">django-select2</a> package integration. Go to change form and you'll see AJAX Select2 widget for Country field.
+  </div>
+{% endblock %}
