@@ -23,6 +23,8 @@ class Country(models.Model):
                                       'country code')
     independence_day = models.DateField(blank=True, null=True)
     continent = models.ForeignKey(Continent, null=True)
+    area = models.BigIntegerField(blank=True, null=True, help_text='km<sup>2</sup>')
+    population = models.BigIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name

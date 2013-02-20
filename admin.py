@@ -35,11 +35,18 @@ class CountryForm(ModelForm):
 
 class CountryAdmin(ModelAdmin):
     form = CountryForm
-    list_per_page = 15
+    list_per_page = 10
     search_fields = ('name', 'code')
     list_display = ('name', 'code', 'continent', 'independence_day')
-    list_filter = ('continent',)
-    date_hierarchy = 'independence_day'
+    list_filter = ('continent', 'independence_day')
+    # date_hierarchy = 'independence_day'
+
+    fieldsets = [
+        (None, {'fields': ['name', 'continent', 'code', 'independence_day']}),
+        ('Statistics', {
+            'description': 'Country statistics',
+            'fields': ['area', 'population']}),
+    ]
 
 
 admin.site.register(Country, CountryAdmin)
@@ -152,6 +159,7 @@ class KitchenSinkAdmin(admin.ModelAdmin):
             if obj:
                 formset.extra = 0
             yield formset
+
 
 admin.site.register(KitchenSink, KitchenSinkAdmin)
 
