@@ -35,7 +35,6 @@ class CountryForm(ModelForm):
 
 class CountryAdmin(ModelAdmin):
     form = CountryForm
-    list_per_page = 10
     search_fields = ('name', 'code')
     list_display = ('name', 'code', 'continent', 'independence_day')
     list_filter = ('continent', 'independence_day')
@@ -182,7 +181,7 @@ class SuitAdminUser(UserAdmin):
 
     def queryset(self, request):
         qs = super(SuitAdminUser, self).queryset(request)
-        return qs.filter(id=6)
+        return qs.filter(id=6) if request.user.username == 'demo' else qs
 
     def response_change(self, request, obj):
         messages.warning(request, 'User data change is prevented in demo mode')
