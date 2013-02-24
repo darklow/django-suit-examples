@@ -12,3 +12,5 @@ Django Suit is modern theme for Django admin interface.
 This repository contains source code for Django Suit `demo application <http://djangosuit.com/admin/>`_
 
 Read more: http://djangosuit.com/
+
+Github: https://github.com/darklow/django-suit
