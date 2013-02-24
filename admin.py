@@ -37,8 +37,8 @@ class CountryAdmin(ModelAdmin):
     form = CountryForm
     search_fields = ('name', 'code')
     list_display = ('name', 'code', 'continent', 'independence_day')
-    list_filter = ('continent', 'independence_day')
-    # date_hierarchy = 'independence_day'
+    list_filter = ('continent',)
+    date_hierarchy = 'independence_day'
 
     fieldsets = [
         (None, {'fields': ['name', 'continent', 'code', 'independence_day']}),
