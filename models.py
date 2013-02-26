@@ -137,10 +137,6 @@ class Category(MPTTModel):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "Categories (django-mptt)"
-        # Be careful changing app_label, change it after all your modifications
-        # on model class are done. South also doesn't support custom app_label
-        app_label = 'integrations'
-        # db_table = 'examples_category'
 
     class MPTTMeta:
         order_insertion_by = ['order']
@@ -165,9 +161,5 @@ class City(models.Model):
     class Meta:
         verbose_name_plural = "Cities (django-select2)"
         unique_together = ('name', 'country')
-        # Be careful changing app_label, change it after all your modifications
-        # on model class are done. South also doesn't support custom app_label
-        app_label = 'integrations'
-        db_table = 'examples_city'
 
 
