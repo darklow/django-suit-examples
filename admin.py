@@ -73,14 +73,12 @@ class CountryFilter(SimpleListFilter):
 
 class KitchenSinkForm(ModelForm):
     class Meta:
-        SmallInput = TextInput(attrs={'class': 'input-small'})
-        CompactTextarea = Textarea(attrs={'rows': '2'})
         widgets = {
-            'multiple2': SmallInput,
+            'multiple2': TextInput(attrs={'class': 'input-small'}),
             'date': AdminDateWidget(attrs={'class': 'vDateField input-small'}),
             'date_widget': SuitDateWidget,
             'datetime_widget': SuitSplitDateTimeWidget,
-            'textfield': CompactTextarea,
+            'textfield': Textarea(attrs={'rows': '2'}),
             'linked_foreign_key': Select(attrs={'class': 'linked-select'}),
         }
 
@@ -89,10 +87,9 @@ class KitchenSinkForm(ModelForm):
 class FridgeInlineForm(ModelForm):
     class Meta:
         model = Fridge
-        CompactTextArea = Textarea(
-            attrs={'class': 'input-large', 'rows': 2, 'style': 'width:95%'})
         widgets = {
-            'description': CompactTextArea,
+            'description': Textarea(attrs={'class': 'input-large', 'rows': 2,
+                                           'style': 'width:95%'}),
             'type': Select(attrs={'class': 'input-medium'}),
         }
 
@@ -205,9 +202,8 @@ admin.site.register(User, SuitAdminUser)
 #
 class CategoryListForm(ModelForm):
     class Meta:
-        SmallTextInput = NumberInput(attrs={'class': 'input-mini'})
         widgets = {
-            'order': SmallTextInput,
+            'order': NumberInput(attrs={'class': 'input-mini'})
         }
 
 
