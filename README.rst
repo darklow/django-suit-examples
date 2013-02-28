@@ -1,16 +1,14 @@
+Examples
+========
+
+This repository is **only for** `demo application <http://djangosuit.com/admin/>`_ of `Django Suit <http://djangosuit.com/>`_ project.
+
+Main repository is here: https://github.com/darklow/django-suit
+
+
 Django Suit
 ===========
 
-Project home: http://djangosuit.com/
-
-Examples
---------
-
-This repository is a part of `Django Suit <http://djangosuit.com/>`_ project.
-Django Suit is modern theme for Django admin interface.
-
-This repository contains source code for Django Suit `demo application <http://djangosuit.com/admin/>`_
-
 Read more: http://djangosuit.com/
 
-Github: https://github.com/darklow/django-suit
+Documentation: http://django-suit.readthedocs.org/en/latest/
