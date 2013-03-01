@@ -12,11 +12,48 @@ from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
 
 
+class SortableTabularInline(admin.TabularInline):
+    sortable = 'order'
+
+    def __init__(self, *args, **kwargs):
+        super(SortableTabularInline, self).__init__(*args, **kwargs)
+
+        self.ordering = (self.sortable,)
+        if self.sortable not in self.fields:
+            self.fields = list(self.fields) + [self.sortable]
+
+        self.form.Meta.widgets[self.sortable] = NumberInput(
+            attrs={'class': 'input-mini suit-sortable inline-sortable'})
+
+    class Media:
+        js = ('suit/js/sortables.js',)
+
+
+# Inlines for KitchenSink
+class CountryInlineForm(ModelForm):
+    class Meta:
+        widgets = {
+            'code': TextInput(attrs={'class': 'input-mini'}),
+            'population': TextInput(attrs={'class': 'input-medium'}),
+            'independence_day': SuitDateWidget,
+        }
+
+
+class CountryInline(SortableTabularInline):
+    form = CountryInlineForm
+    model = Country
+    fields = ('name', 'code', 'population',)
+    extra = 1
+    verbose_name_plural = 'Cities (Sortable example)'
+    sortable = 'order'
+
+
 class ContinentAdmin(ModelAdmin):
     search_fields = ('name',)
-    list_display = ('name_', 'name',)
+    list_display = ('name_', 'name')
     list_editable = ('name',)
     list_display_links = ('name_',)
+    inlines = (CountryInline,)
 
     def name_(self, obj):
         return unicode(obj)
@@ -39,6 +76,7 @@ class CountryAdmin(ModelAdmin):
     list_display = ('name', 'code', 'continent', 'independence_day')
     list_filter = ('continent',)
     date_hierarchy = 'independence_day'
+    exclude = ('order',)
 
     fieldsets = [
         (None, {'fields': ['name', 'continent', 'code', 'independence_day']}),

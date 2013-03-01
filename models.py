@@ -25,6 +25,7 @@ class Country(models.Model):
     continent = models.ForeignKey(Continent, null=True)
     area = models.BigIntegerField(blank=True, null=True, help_text='km<sup>2</sup>')
     population = models.BigIntegerField(blank=True, null=True)
+    order = models.PositiveIntegerField()
 
     def __unicode__(self):
         return self.name
@@ -96,6 +97,10 @@ class Fridge(models.Model):
     type = models.SmallIntegerField(choices=TYPE_CHOICES3)
     description = models.TextField(blank=True)
     is_quiet = models.BooleanField()
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.name
