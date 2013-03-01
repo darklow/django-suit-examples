@@ -24,7 +24,7 @@ class Country(models.Model):
                                       'country code')
     independence_day = models.DateField(blank=True, null=True)
     continent = models.ForeignKey(Continent, null=True)
-    area = models.BigIntegerField(blank=True, null=True, help_text='km<sup>2</sup>')
+    area = models.BigIntegerField(blank=True, null=True)
     population = models.BigIntegerField(blank=True, null=True)
     order = models.PositiveIntegerField()
 
@@ -87,6 +87,10 @@ class KitchenSink(models.Model):
     raw_id_field = models.ForeignKey(Country,
                                      help_text='Regular raw ID field',
                                      null=True, blank=True)
+
+    enclosed1 = models.CharField(max_length=64, blank=True)
+    enclosed2 = models.CharField(max_length=64, blank=True)
+    enclosed3 = models.CharField(max_length=64, blank=True)
 
     def __unicode__(self):
         return self.name

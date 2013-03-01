@@ -4,11 +4,13 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from django.forms import TextInput, ModelForm, Textarea, Select
+from django.forms import TextInput, ModelForm, Textarea, Select, CharField
 from .models import Country, Continent, KitchenSink, Category, City, \
     Microwave, Fridge
 from suit.admin import SortableTabularInline, SortableModelAdmin
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
+from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
+    NumberInput, EnclosedInput
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
 
@@ -52,6 +54,14 @@ class CountryForm(ModelForm):
         widgets = {
             'code': TextInput(attrs={'class': 'input-mini'}),
             'independence_day': SuitDateWidget,
+            'area': EnclosedInput(prepend='icon-globe', append='km<sup>2</sup>',
+                                  attrs={'class': 'input-small'}),
+            'population': EnclosedInput(prepend='icon-user',
+                                        append='<input type="button" '
+                                               'class="btn" onclick="window'
+                                               '.open(\'https://www.google'
+                                               '.com/\')" value="Search">',
+                                        attrs={'class': 'input-small'}),
         }
 
 
@@ -61,12 +71,11 @@ class CountryAdmin(ModelAdmin):
     list_display = ('name', 'code', 'continent', 'independence_day')
     list_filter = ('continent',)
     date_hierarchy = 'independence_day'
-    exclude = ('order',)
 
     fieldsets = [
         (None, {'fields': ['name', 'continent', 'code', 'independence_day']}),
         ('Statistics', {
-            'description': 'Country statistics',
+            'description': 'EnclosedInput widget examples',
             'fields': ['area', 'population']}),
     ]
 
