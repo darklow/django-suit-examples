@@ -90,7 +90,6 @@ class KitchenSink(models.Model):
 
     enclosed1 = models.CharField(max_length=64, blank=True)
     enclosed2 = models.CharField(max_length=64, blank=True)
-    enclosed3 = models.CharField(max_length=64, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -163,6 +162,8 @@ class City(models.Model):
     name = models.CharField(max_length=64)
     country = models.ForeignKey(Country)
     capital = models.BooleanField()
+    area = models.BigIntegerField(blank=True, null=True)
+    population = models.BigIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name

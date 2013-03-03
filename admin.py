@@ -4,13 +4,11 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from django.forms import TextInput, ModelForm, Textarea, Select, CharField
+from django.forms import TextInput, ModelForm, Textarea, Select
 from .models import Country, Continent, KitchenSink, Category, City, \
     Microwave, Fridge
 from suit.admin import SortableTabularInline, SortableModelAdmin
-from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
-from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
-    NumberInput, EnclosedInput
+from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, EnclosedInput
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
 
@@ -112,6 +110,13 @@ class KitchenSinkForm(ModelForm):
             'datetime_widget': SuitSplitDateTimeWidget,
             'textfield': Textarea(attrs={'rows': '2'}),
             'linked_foreign_key': Select(attrs={'class': 'linked-select'}),
+
+            'enclosed1': EnclosedInput(append='icon-plane',
+                                       attrs={'class': 'input-medium'}),
+            'enclosed2': EnclosedInput(prepend='icon-envelope',
+                                       append='<input type="button" '
+                                              'class="btn" value="Send">',
+                                       attrs={'class': 'input-medium'}),
         }
 
 
@@ -162,6 +167,11 @@ class KitchenSinkAdmin(admin.ModelAdmin):
         ('Foreign key relations',
          {'description': 'Original select and linked select feature',
           'fields': ['country', 'linked_foreign_key', 'raw_id_field']}),
+
+        ('EnclosedInput widget',
+         {
+         'description': 'Supports Twitter Bootstrap prepended, appended inputs',
+         'fields': ['enclosed1', 'enclosed2']}),
 
         ('Boolean and choices',
          {'fields': ['boolean', 'boolean_with_help', 'choices',
@@ -270,12 +280,31 @@ class CityForm(ModelForm):
         )
     )
 
+    class Meta:
+        model = City
+        widgets = {
+            'area': EnclosedInput(prepend='icon-globe', append='km<sup>2</sup>',
+                                  attrs={'class': 'input-small'}),
+            'population': EnclosedInput(prepend='icon-user',
+                                        append='<input type="button" '
+                                               'class="btn" onclick="window'
+                                               '.open(\'https://www.google'
+                                               '.com/\')" value="Search">',
+                                        attrs={'class': 'input-small'}),
+        }
+
 
 class CityAdmin(ModelAdmin):
     form = CityForm
     search_fields = ('name', 'country__name')
     list_display = ('name', 'country', 'capital', 'continent')
     list_filter = (CountryFilter, 'capital')
+    fieldsets = [
+        (None, {'fields': ['name', 'country', 'capital']}),
+        ('Statistics', {
+            'description': 'EnclosedInput widget examples',
+            'fields': ['area', 'population']}),
+    ]
 
     def continent(self, obj):
         return obj.country.continent
