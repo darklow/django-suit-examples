@@ -5,6 +5,7 @@ from mptt.models import MPTTModel
 
 class Continent(models.Model):
     name = models.CharField(max_length=256)
+    order = models.PositiveIntegerField()
 
     def __unicode__(self):
         return self.name
@@ -140,7 +141,6 @@ class Category(MPTTModel):
         return self.name
 
     class Meta:
-        ordering = ['name']
         verbose_name_plural = "Categories (django-mptt)"
 
     class MPTTMeta:

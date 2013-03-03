@@ -7,26 +7,10 @@ from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
 from .models import Country, Continent, KitchenSink, Category, City, \
     Microwave, Fridge
+from suit.admin import SortableTabularInline, SortableModelAdmin
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, NumberInput
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
-
-
-class SortableTabularInline(admin.TabularInline):
-    sortable = 'order'
-
-    def __init__(self, *args, **kwargs):
-        super(SortableTabularInline, self).__init__(*args, **kwargs)
-
-        self.ordering = (self.sortable,)
-        if self.sortable not in self.fields:
-            self.fields = list(self.fields) + [self.sortable]
-
-        self.form.Meta.widgets[self.sortable] = NumberInput(
-            attrs={'class': 'input-mini suit-sortable inline-sortable'})
-
-    class Media:
-        js = ('suit/js/sortables.js',)
 
 
 # Inlines for KitchenSink
@@ -48,12 +32,13 @@ class CountryInline(SortableTabularInline):
     sortable = 'order'
 
 
-class ContinentAdmin(ModelAdmin):
+class ContinentAdmin(SortableModelAdmin):
     search_fields = ('name',)
     list_display = ('name_', 'name')
     list_editable = ('name',)
     list_display_links = ('name_',)
     inlines = (CountryInline,)
+    sortable = 'order'
 
     def name_(self, obj):
         return unicode(obj)
@@ -126,13 +111,13 @@ class FridgeInlineForm(ModelForm):
     class Meta:
         model = Fridge
         widgets = {
-            'description': Textarea(attrs={'class': 'input-large', 'rows': 2,
+            'description': Textarea(attrs={'class': 'input-medium', 'rows': 2,
                                            'style': 'width:95%'}),
-            'type': Select(attrs={'class': 'input-medium'}),
+            'type': Select(attrs={'class': 'input-small'}),
         }
 
 
-class FridgeInline(admin.TabularInline):
+class FridgeInline(SortableTabularInline):
     model = Fridge
     form = FridgeInlineForm
     extra = 1
@@ -238,24 +223,18 @@ admin.site.register(User, SuitAdminUser)
 # Django-mptt
 # https://github.com/django-mptt/django-mptt/
 #
-class CategoryListForm(ModelForm):
-    class Meta:
-        widgets = {
-            'order': NumberInput(attrs={'class': 'input-mini'})
-        }
-
-
-class CategoryAdmin(MPTTModelAdmin):
+class CategoryAdmin(MPTTModelAdmin, SortableModelAdmin):
+    """
+    Example of django-mptt and sortable together. Important note:
+    If used together MPTTModelAdmin must be before SortableModelAdmin
+    """
     mptt_level_indent = 20
     search_fields = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
-    list_display = ('name', 'slug', 'is_active', 'order')
-    list_editable = ('is_active', 'order',)
-
-    def get_changelist_form(self, request, **kwargs):
-        kwargs.setdefault('form', CategoryListForm)
-        return super(CategoryAdmin, self).get_changelist_form(request,
-                                                              **kwargs)
+    list_display = ('name', 'slug', 'is_active')
+    list_editable = ('is_active',)
+    list_display_links = ('name',)
+    sortable = 'order'
 
 
 admin.site.register(Category, CategoryAdmin)
