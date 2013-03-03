@@ -34,9 +34,7 @@ class CountryInline(SortableTabularInline):
 
 class ContinentAdmin(SortableModelAdmin):
     search_fields = ('name',)
-    list_display = ('name_', 'name')
-    list_editable = ('name',)
-    list_display_links = ('name_',)
+    list_display = ('name',)
     inlines = (CountryInline,)
     sortable = 'order'
 
