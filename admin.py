@@ -28,7 +28,7 @@ class CountryInline(SortableTabularInline):
     model = Country
     fields = ('name', 'code', 'population',)
     extra = 1
-    verbose_name_plural = 'Cities (Sortable example)'
+    verbose_name_plural = 'Countries (Sortable example)'
     sortable = 'order'
 
 
