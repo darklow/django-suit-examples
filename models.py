@@ -26,7 +26,7 @@ class Country(models.Model):
     continent = models.ForeignKey(Continent, null=True)
     area = models.BigIntegerField(blank=True, null=True)
     population = models.BigIntegerField(blank=True, null=True)
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(default=0)
 
     def __unicode__(self):
         return self.name
