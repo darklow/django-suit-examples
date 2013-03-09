@@ -8,7 +8,8 @@ from django.forms import TextInput, ModelForm, Textarea, Select
 from .models import Country, Continent, KitchenSink, Category, City, \
     Microwave, Fridge
 from suit.admin import SortableTabularInline, SortableModelAdmin
-from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, EnclosedInput
+from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
+    EnclosedInput, LinkedSelect, AutosizedTextarea
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
 from mptt.admin import MPTTModelAdmin
 
@@ -58,6 +59,7 @@ class CountryForm(ModelForm):
                                                '.open(\'https://www.google'
                                                '.com/\')" value="Search">',
                                         attrs={'class': 'input-small'}),
+            'description': AutosizedTextarea,
         }
 
 
@@ -73,6 +75,10 @@ class CountryAdmin(ModelAdmin):
         ('Statistics', {
             'description': 'EnclosedInput widget examples',
             'fields': ['area', 'population']}),
+        ('Autosized textarea', {
+            'description': 'AutosizedTextarea widget example - adapts height '
+                           'based on user input',
+            'fields': ['description']}),
     ]
 
 
@@ -106,8 +112,8 @@ class KitchenSinkForm(ModelForm):
             'date': AdminDateWidget(attrs={'class': 'vDateField input-small'}),
             'date_widget': SuitDateWidget,
             'datetime_widget': SuitSplitDateTimeWidget,
-            'textfield': Textarea(attrs={'rows': '2'}),
-            'linked_foreign_key': Select(attrs={'class': 'linked-select'}),
+            'textfield': AutosizedTextarea(attrs={'rows': '2'}),
+            'linked_foreign_key': LinkedSelect,
 
             'enclosed1': EnclosedInput(append='icon-plane',
                                        attrs={'class': 'input-medium'}),
@@ -123,8 +129,9 @@ class FridgeInlineForm(ModelForm):
     class Meta:
         model = Fridge
         widgets = {
-            'description': Textarea(attrs={'class': 'input-medium', 'rows': 2,
-                                           'style': 'width:95%'}),
+            'description': AutosizedTextarea(
+                attrs={'class': 'input-medium', 'rows': 2,
+                       'style': 'width:95%'}),
             'type': Select(attrs={'class': 'input-small'}),
         }
 
@@ -168,8 +175,9 @@ class KitchenSinkAdmin(admin.ModelAdmin):
 
         ('EnclosedInput widget',
          {
-         'description': 'Supports Twitter Bootstrap prepended, appended inputs',
-         'fields': ['enclosed1', 'enclosed2']}),
+             'description': 'Supports Twitter Bootstrap prepended, '
+                            'appended inputs',
+             'fields': ['enclosed1', 'enclosed2']}),
 
         ('Boolean and choices',
          {'fields': ['boolean', 'boolean_with_help', 'choices',

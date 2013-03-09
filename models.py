@@ -27,6 +27,9 @@ class Country(models.Model):
     area = models.BigIntegerField(blank=True, null=True)
     population = models.BigIntegerField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
+    description = models.TextField(blank=True,
+                                   help_text='Try and enter few some more '
+                                             'lines')
 
     def __unicode__(self):
         return self.name
@@ -48,7 +51,9 @@ class KitchenSink(models.Model):
     multiple_in_row = models.CharField(max_length=64,
                                        help_text='Help text for multiple')
     multiple2 = models.CharField(max_length=10, blank=True)
-    textfield = models.TextField(blank=True)
+    textfield = models.TextField(blank=True,
+                                 verbose_name='Autosized textarea',
+                                 help_text='Try and enter few some more lines')
 
     file = models.FileField(upload_to='.', blank=True)
     readonly_field = models.CharField(max_length=127, default='Some value here')
