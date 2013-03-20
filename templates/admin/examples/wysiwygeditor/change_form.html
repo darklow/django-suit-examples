@@ -1,0 +1,45 @@
+{% extends 'admin/change_form.html' %}
+{% load url from future %}
+{% load i18n %}
+
+
+{% block after_related_objects %}
+  {{ block.super }}
+  <h2>Notes on WYSIWYG editors</h2>
+  <div class="box" style="padding: 15px">
+  Examples you see above are
+  <a href="https://github.com/darklow/django-suit-redactor" target="_blank">django-suit-redactor</a> and <a href="https://github.com/darklow/django-suit-ckeditor" target="_blank">django-suit-ckeditor</a> packages. We tested many existing apps, but many of them were missing tests, had implementation or other flaws, so we decided to create our own. We are planning to improve these packages in future (support file upload, etc.)
+  <br>
+  <br>
+  Keep in mind <a href="http://imperavi.com/redactor/" target="_blank">Imperavi Readactor</a> is not part of Django Suit package and is licensed under Creative Commons Attribution-NonCommercial 3.0 license.
+
+  <br><br>
+    Also you can integrate WYSIWYG editor using any other third party packages.<br>
+    More documentation on wysiwyg editors integration <a href="">is here</a>
+    <br><br>
+    Django Suit wysiwyg packages:
+    <ul>
+      <li><a href="https://github.com/darklow/django-suit-redactor" target="_blank">django-suit-redactor</a> - Imperavi Redactor. No file upload yet (Planned)</li>
+      <li><a href="https://github.com/darklow/django-suit-ckeditor" target="_blank">django-suit-ckeditor</a> - CK Editor. No file upload yet (Planned)</li>
+    </ul>
+    Few third party packages we tested for Django Suit:
+    <ul>
+      <li><a href="https://github.com/aljosa/django-tinymce" target="_blank">django-tinymce</a> - TinyMCE editor. Tested and works great</li>
+      <li><a href="https://github.com/shaunsephton/django-ckeditor" target="_blank">django-ckeditor</a> - CK Editor. Works great, but no support for CK Editor 4.x</li>
+      <li><a href="https://bitbucket.org/ssbb/django-cked" target="_blank">django-cked</a> - CK Editor. Quite new and unfortunately buggy. Supports CK Editor 4.x</li>
+      <li><a href="https://github.com/TigorC/django-redactorjs" target="_blank">django-redactorjs</a> - Imperavi Redactor.</li>
+      <li><a href="https://github.com/mazelife/django-redactor" target="_blank">django-redactor</a> - Imperavi Redactor. No Pypi package yet</li>
+      <li>More here: <a href="https://www.djangopackages.com/grids/g/wysiwyg/" target="_blank">WYSIWYG Editors grid</a> on DjangoPackages.com</li>
+    </ul>
+  </div>
+
+  <style type="text/css">
+  .redactor_editor {
+    max-height: 200px;
+  }
+  </style>
+
+  <script type="text/javascript">
+    CKEDITOR.disableAutoInline=true;
+  </script>
+{% endblock %}

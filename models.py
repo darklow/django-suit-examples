@@ -178,3 +178,11 @@ class City(models.Model):
         unique_together = ('name', 'country')
 
 
+class WysiwygEditor(models.Model):
+    name = models.CharField(max_length=64)
+    redactor = models.TextField(verbose_name='Redactor small', blank=True)
+    redactor2 = models.TextField(verbose_name='Redactor2', blank=True)
+    ckeditor = models.TextField(verbose_name='CKEditor', blank=True)
+
+    def __unicode__(self):
+        return self.name

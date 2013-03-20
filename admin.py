@@ -5,8 +5,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
+from suit_ckeditor.widgets import CKEditorWidget
+from suit_redactor.widgets import RedactorWidget
 from .models import Country, Continent, KitchenSink, Category, City, \
-    Microwave, Fridge
+    Microwave, Fridge, WysiwygEditor
 from suit.admin import SortableTabularInline, SortableModelAdmin
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
     EnclosedInput, LinkedSelect, AutosizedTextarea
@@ -317,3 +319,54 @@ class CityAdmin(ModelAdmin):
 
 
 admin.site.register(City, CityAdmin)
+
+#
+# Wysiwyg editor integration examples
+#
+class WysiwygEditorForm(ModelForm):
+    class Meta:
+        model = WysiwygEditor
+
+        _ck_editor_toolbar = [
+            {'name': 'basicstyles', 'groups': ['basicstyles', 'cleanup']},
+            {'name': 'paragraph',
+             'groups': ['list', 'indent', 'blocks', 'align']},
+            {'name': 'document', 'groups': ['mode']}, '/',
+            {'name': 'styles'}, {'name': 'colors'},
+            {'name': 'insert_custom',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule']},
+            {'name': 'about'}]
+
+        _ck_editor_config = {'autoGrow_onStartup': True,
+                             'autoGrow_minHeight': 100,
+                             'autoGrow_maxHeight': 250,
+                             'extraPlugins': 'autogrow',
+                             'toolbarGroups': _ck_editor_toolbar}
+        widgets = {
+            'redactor': RedactorWidget(editor_options={
+                'buttons': ['html', '|', 'formatting', '|', 'bold', 'italic']}),
+            'redactor2': RedactorWidget,
+            'ckeditor': CKEditorWidget(editor_options=_ck_editor_config),
+        }
+
+
+class WysiwygEditorAdmin(ModelAdmin):
+    form = WysiwygEditorForm
+    search_fields = ('name',)
+    list_display = ('name',)
+    fieldsets = [
+        (None, {'fields': ['name', 'redactor']}),
+
+        ('Redactor', {
+            'classes': ('full-width',),
+            'description': 'Full width example',
+            'fields': ['redactor2']}),
+
+        ('CK Editor', {
+            'classes': ('full-width',),
+            'description': 'CKEditor 4.x custom toolbar configuration example',
+            'fields': ['ckeditor']})
+    ]
+
+
+admin.site.register(WysiwygEditor, WysiwygEditorAdmin)
