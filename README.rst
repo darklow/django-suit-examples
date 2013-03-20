@@ -11,4 +11,4 @@ Django Suit
 
 Read more: http://djangosuit.com/
 
-Documentation: http://django-suit.readthedocs.org/en/latest/
+Documentation: http://django-suit.readthedocs.org/
