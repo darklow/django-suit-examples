@@ -1,0 +1,20 @@
+{# Extended just to add disclaimer #}
+
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block search %}
+  {{ block.super }}
+  <div class="disclaimer breadcrumb">
+    This is an example of <a href="https://github.com/etianen/django-reversion" target="_blank">django-reversion</a> package integration.</div>
+{% endblock %}
+
+{% block object-tools-items %}
+{% if not is_popup %}
+<a href="{{ recoverlist_url }}" class="recoverlink btn">
+    <i class="icon-repeat"></i>&nbsp;
+    {% blocktrans with cl.opts.verbose_name_plural|escape as name %}Recover deleted {{ name }}{% endblocktrans %}</a>
+{% endif %}
+{{block.super}}
+{% endblock %}
+
