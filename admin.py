@@ -49,6 +49,24 @@ class ContinentAdmin(SortableModelAdmin):
 admin.site.register(Continent, ContinentAdmin)
 
 
+class CityInlineForm(ModelForm):
+    class Meta:
+        widgets = {
+            'area': EnclosedInput(prepend='icon-globe', append='km<sup>2</sup>',
+                                  attrs={'class': 'input-small'}),
+            'population': EnclosedInput(append='icon-user',
+                                        attrs={'class': 'input-small'}),
+        }
+
+
+class CityInline(admin.TabularInline):
+    form = CityInlineForm
+    model = City
+    extra = 3
+    verbose_name_plural = 'Cities'
+    suit_classes = 'suit-tab suit-tab-cities'
+
+
 class CountryForm(ModelForm):
     class Meta:
         widgets = {
@@ -63,6 +81,7 @@ class CountryForm(ModelForm):
                                                '.com/\')" value="Search">',
                                         attrs={'class': 'input-small'}),
             'description': AutosizedTextarea,
+            'architecture': AutosizedTextarea(attrs={'class': 'span5'}),
         }
 
 
@@ -73,16 +92,36 @@ class CountryAdmin(ModelAdmin):
     list_filter = ('continent',)
     date_hierarchy = 'independence_day'
 
+    inlines = (CityInline,)
+
     fieldsets = [
-        (None, {'fields': ['name', 'continent', 'code', 'independence_day']}),
+        (None, {
+            'classes': ('suit-tab suit-tab-general',),
+            'fields': ['name', 'continent', 'code', 'independence_day']
+        }),
         ('Statistics', {
+            'classes': ('suit-tab suit-tab-general',),
             'description': 'EnclosedInput widget examples',
             'fields': ['area', 'population']}),
         ('Autosized textarea', {
+            'classes': ('suit-tab suit-tab-general',),
             'description': 'AutosizedTextarea widget example - adapts height '
                            'based on user input',
             'fields': ['description']}),
+        ('Architecture', {
+            'classes': ('suit-tab suit-tab-cities',),
+            'description': 'Tabs can contain any fieldsets and inlines',
+            'fields': ['architecture']}),
     ]
+
+    suit_tabs = (('general', 'General'), ('cities', 'Cities'), ('flag', 'Flag'),
+                 ('info', 'Info on tabs'))
+
+    suit_templates = (
+        ('admin/examples/country/tab_disclaimer.html', 'middle', 'cities'),
+        ('admin/examples/country/tab_flag.html', '', 'flag'),
+        ('admin/examples/country/tab_info.html', '', 'info'),
+    )
 
 
 admin.site.register(Country, CountryAdmin)
