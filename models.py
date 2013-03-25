@@ -30,6 +30,7 @@ class Country(models.Model):
     description = models.TextField(blank=True,
                                    help_text='Try and enter few some more '
                                              'lines')
+    architecture = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
