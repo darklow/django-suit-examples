@@ -114,10 +114,10 @@ class CountryAdmin(ModelAdmin):
             'fields': ['architecture']}),
     ]
 
-    suit_tabs = (('general', 'General'), ('cities', 'Cities'), ('flag', 'Flag'),
-                 ('info', 'Info on tabs'))
+    suit_form_tabs = (('general', 'General'), ('cities', 'Cities'),
+                      ('flag', 'Flag'), ('info', 'Info on tabs'))
 
-    suit_templates = (
+    suit_form_includes = (
         ('admin/examples/country/tab_disclaimer.html', 'middle', 'cities'),
         ('admin/examples/country/tab_flag.html', '', 'flag'),
         ('admin/examples/country/tab_info.html', '', 'info'),
