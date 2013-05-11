@@ -1,0 +1,77 @@
+{% extends "admin/base.html" %}
+{% load admin_static %}
+
+{# {#Additional <head> content here #}
+{% block extrahead %}
+    {{ block.super }}
+
+    <!-- GA
+    ================================================== -->
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-121366-19']);
+        _gaq.push(['_setCustomVar', 1, 'app', 'demo', 1]);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+{% endblock %}
+
+
+{# Additional <head> content here, some extra meta tags or favicon #}
+{#{% block extrahead %}#}
+{#{% endblock %}#}
+
+
+{# Additional CSS includes #}
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/examples.css' %}" media="all">
+{% endblock %}
+
+
+{# Additional JS files in footer, right before </body> #}
+{#{% block extrajs %}#}
+{#  <script type="text/javascript" src="{% static 'js/my_project.js' %}"></script>#}
+{#{% endblock %}#}
+
+
+{# Footer links (left side) #}
+{#{% block footer_links %}#}
+{#  <a href="/docs/" class="icon"><i class="icon-question-sign"></i>Documentation</a>#}
+{#{% endblock %}#}
+
+
+{# Footer branding name (center) #}
+{#{% block footer_branding %}#}
+{#{% endblock %}#}
+
+
+{# Footer copyright (right side) #}
+{#{% block copyright %}#}
+{#  Copyright &copy; 2013 Client<br>Developed by <a href="http://yoursite.com" target="_blank">YourName</a> #}
+{#{% endblock %}#}
+
+
+{% block header_content %}
+    {{ block.super }}
+    <div class="header-content">
+        <div class="header-column icon">
+            <i class="icon-home"></i><br>
+            <i class="icon-comment"></i>
+        </div>
+        <div class="header-column">
+            <a href="/" class="grey">DjangoSuit.com</a><br>
+            <span class="grey">Demo data will reset every 15 minutes</span>
+        </div>
+    </div>
+{% endblock %}

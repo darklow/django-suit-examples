@@ -38,12 +38,33 @@ class CountryInline(SortableTabularInline):
 
 class ContinentAdmin(SortableModelAdmin):
     search_fields = ('name',)
-    list_display = ('name',)
+    list_display = ('name', 'countries')
     inlines = (CountryInline,)
     sortable = 'order'
 
-    def name_(self, obj):
-        return unicode(obj)
+    def countries(self, obj):
+        return len(obj.country_set.all())
+
+    def suit_row_attributes(self, obj):
+        class_map = {
+            'Europe': 'success',
+            'South America': 'warning',
+            'North America': 'success',
+            'Africa': 'error',
+            'Australia': 'warning',
+            'Asia': 'info',
+            'Antarctica': 'info',
+        }
+
+        css_class = class_map.get(obj.name)
+        if css_class:
+            return {'class': css_class}
+
+    def suit_cell_attributes(self, obj, column):
+        if column == 'countries':
+            return {'class': 'text-center'}
+        elif column == 'right_aligned':
+            return {'class': 'text-right muted'}
 
 
 admin.site.register(Continent, ContinentAdmin)
@@ -91,6 +112,7 @@ class CountryAdmin(ModelAdmin):
     list_display = ('name', 'code', 'continent', 'independence_day')
     list_filter = ('continent',)
     date_hierarchy = 'independence_day'
+    list_select_related = True
 
     inlines = (CityInline,)
 

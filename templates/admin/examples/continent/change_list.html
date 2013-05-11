@@ -1,0 +1,11 @@
+{# Extended just to add disclaimer #}
+
+{% extends "admin/change_list.html" %}
+{% load admin_list %}
+
+{% block search %}
+  {{ block.super }}
+  <div class="disclaimer breadcrumb">
+    An example of <a href="http://django-suit.readthedocs.org/en/develop/sortables.html#change-list-sortable" target="_blank">changelist sortable</a> and also <a href="http://django-suit.readthedocs.org/en/develop/list_attributes.html#list-row-attributes" target="_blank">suit_row_attributes</a> and <a href="http://django-suit.readthedocs.org/en/develop/list_attributes.html#list-cell-attributes" target="_blank">suit_cell_attributes</a> callables for ModelAdmin class which allows styling (colors, alignment, etc.) for rows and cells based on object instance. See code of this exact example <a href=""> on github</a>.
+  </div>
+{% endblock %}
