@@ -196,3 +196,8 @@ class ReversionedItem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class ImportExportItem(models.Model):
+    name = models.CharField(max_length=64)
+    quality = models.SmallIntegerField(choices=TYPE_CHOICES, default=1)
+    is_active = models.BooleanField(default=False)

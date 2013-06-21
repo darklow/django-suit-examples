@@ -6,10 +6,11 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, ModelForm, Textarea, Select
 from reversion import VersionAdmin
+from import_export.admin import ImportExportModelAdmin
 from suit_ckeditor.widgets import CKEditorWidget
 from suit_redactor.widgets import RedactorWidget
 from .models import Country, Continent, KitchenSink, Category, City, \
-    Microwave, Fridge, WysiwygEditor, ReversionedItem
+    Microwave, Fridge, WysiwygEditor, ReversionedItem, ImportExportItem
 from suit.admin import SortableTabularInline, SortableModelAdmin
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
     EnclosedInput, LinkedSelect, AutosizedTextarea
@@ -435,9 +436,16 @@ admin.site.register(WysiwygEditor, WysiwygEditorAdmin)
 
 
 class ReversionedItemAdmin(VersionAdmin):
-    # form = WysiwygEditorForm
     search_fields = ('name',)
     list_display = ('name', 'quality', 'is_active')
 
 
 admin.site.register(ReversionedItem, ReversionedItemAdmin)
+
+
+class ImportExportDemoAdmin(ImportExportModelAdmin):
+    search_fields = ('name',)
+    list_display = ('name', 'quality', 'is_active')
+
+
+admin.site.register(ImportExportItem, ImportExportDemoAdmin)
