@@ -11,7 +11,8 @@ from suit_ckeditor.widgets import CKEditorWidget
 from suit_redactor.widgets import RedactorWidget
 from .models import Country, Continent, KitchenSink, Category, City, \
     Microwave, Fridge, WysiwygEditor, ReversionedItem, ImportExportItem
-from suit.admin import SortableTabularInline, SortableModelAdmin
+from suit.admin import SortableTabularInline, SortableModelAdmin, \
+    SortableStackedInline
 from suit.widgets import SuitDateWidget, SuitSplitDateTimeWidget, \
     EnclosedInput, LinkedSelect, AutosizedTextarea
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
@@ -208,10 +209,11 @@ class FridgeInline(SortableTabularInline):
     verbose_name_plural = 'Fridges (Tabular inline)'
 
 
-class MicrowaveInline(admin.StackedInline):
+class MicrowaveInline(SortableStackedInline):
     model = Microwave
     extra = 1
     verbose_name_plural = 'Microwaves (Stacked inline)'
+
 
 # Kitchen sink model admin
 class KitchenSinkAdmin(admin.ModelAdmin):

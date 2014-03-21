@@ -123,6 +123,10 @@ class Microwave(models.Model):
     type = models.SmallIntegerField(choices=TYPE_CHOICES3, default=2,
                                     help_text='Choose wisely')
     is_compact = models.BooleanField()
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.name
